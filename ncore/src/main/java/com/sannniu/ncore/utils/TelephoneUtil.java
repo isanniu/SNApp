@@ -32,7 +32,7 @@ public class TelephoneUtil {
 
     /**
      * 网络是否激活状态
-     * 
+     *
      * @param context
      * @return 权限：android.Manifest.permission#ACCESS_NETWORK_STATE
      */
@@ -49,7 +49,7 @@ public class TelephoneUtil {
 
     /**
      * WIFI是否可用
-     * 
+     *
      * @param context
      * @return 权限：android.Manifest.permission#ACCESS_NETWORK_STATE
      */
@@ -67,7 +67,7 @@ public class TelephoneUtil {
 
     /**
      * 获取android SDK 版本
-     * 
+     *
      * @return
      */
     public static int getAndroidSDKVersion() {
@@ -76,7 +76,7 @@ public class TelephoneUtil {
 
     /**
      * 获取缓存目录大小（单个应用最大缓存限制）
-     * 
+     *
      * @param context
      * @return
      */
@@ -86,7 +86,7 @@ public class TelephoneUtil {
 
     /**
      * 获取DEVICE
-     * 
+     *
      * @return
      */
     public static String getDevice() {
@@ -116,7 +116,7 @@ public class TelephoneUtil {
 
     /**
      * 获取手机MAC地址
-     * 
+     *
      * @param context
      * @return
      */
@@ -126,7 +126,7 @@ public class TelephoneUtil {
 
     /**
      * 获取手机网络名称
-     * 
+     *
      * @param context
      * @return
      */
@@ -136,7 +136,7 @@ public class TelephoneUtil {
 
     /**
      * Returns the alphabetic name of current registered operator.
-     * <p>
+     * <p/>
      * Availability: Only when user is registered to a network. Result may be unreliable on CDMA networks (use
      * {@link TelephonyManager#getPhoneType()} to determine if on a CDMA network).
      */
@@ -150,7 +150,7 @@ public class TelephoneUtil {
 
     /**
      * 获取手机当前语言
-     * 
+     *
      * @return
      */
     public static String getPhoneLanguage() {
@@ -162,7 +162,7 @@ public class TelephoneUtil {
 
     /**
      * 获取手机类型
-     * 
+     *
      * @return
      */
     public static String getPhoneType() {
@@ -173,11 +173,9 @@ public class TelephoneUtil {
     }
 
 
-
     /**
-     *
      * 获取Product
-     * 
+     *
      * @return
      */
     public static String getProduct() {
@@ -186,10 +184,8 @@ public class TelephoneUtil {
 
     /**
      * @param context
-     * @param unit
-     *            The unit to convert from. {@link TypedValue#TYPE_DIMENSION}.
-     * @param value
-     *            value The value to apply the unit to.
+     * @param unit    The unit to convert from. {@link TypedValue#TYPE_DIMENSION}.
+     * @param value   value The value to apply the unit to.
      * @return The complex floating point value multiplied by the appropriate metrics depending on its unit.
      */
     public static int getRawSize(Context context, int unit, float value) {
@@ -203,7 +199,7 @@ public class TelephoneUtil {
 
     /**
      * 获取手机分辨率
-     * 
+     *
      * @param activity
      * @return
      */
@@ -215,7 +211,7 @@ public class TelephoneUtil {
 
     /**
      * 获取手机分辨率
-     * 
+     *
      * @param context
      * @return
      */
@@ -231,7 +227,7 @@ public class TelephoneUtil {
     public static String getDensityDpi(Context context) {
         DisplayMetrics dm = new DisplayMetrics();
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-        return ""+dm.densityDpi;
+        return "" + dm.densityDpi;
     }
 
     /***
@@ -246,7 +242,7 @@ public class TelephoneUtil {
 
     /**
      * 获取SDK版本
-     * 
+     *
      * @return
      */
     @SuppressWarnings("deprecation")
@@ -256,7 +252,7 @@ public class TelephoneUtil {
 
     /**
      * 获取SDK版本名称
-     * 
+     *
      * @return
      */
     public static String getSDKVersionName() {
@@ -265,7 +261,7 @@ public class TelephoneUtil {
 
     /**
      * 获取当前服务(网络)类型
-     * 
+     *
      * @param context
      * @return wifi/mobile/unicom/telecom
      */
@@ -287,7 +283,7 @@ public class TelephoneUtil {
 
     /**
      * 获取UserAgent
-     * 
+     *
      * @return
      */
     public static String getUserAgent() {
@@ -310,16 +306,13 @@ public class TelephoneUtil {
             char ch = host.charAt(i);
             if (ch == ':') {
                 colonCount++;
-            }
-            else if (ch == '.') {
+            } else if (ch == '.') {
                 dotCount++;
-            }
-            else {
+            } else {
                 char upper = Character.toUpperCase(ch);
                 if ((upper >= 48 && upper <= 57) || (upper >= 65 && upper <= 70)) {
                     // is valid ip char
-                }
-                else {
+                } else {
                     // invalid char
                     isAllValidChars = false;
                     break;
@@ -330,15 +323,12 @@ public class TelephoneUtil {
         if (isAllValidChars) {
             if (dotCount == 3) {
                 return true;
-            }
-            else if (colonCount >= 2) {
+            } else if (colonCount >= 2) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -351,7 +341,7 @@ public class TelephoneUtil {
         if (ni.isConnected()) { // 如果有wifi连接，则选择wifi，不返回代理
             return null;
         } else {
-            try{
+            try {
                 Cursor c = getCurrentApn(context); // 得到默认apn
                 if (c != null && c.getCount() > 0) {
                     c.moveToFirst();
@@ -364,22 +354,19 @@ public class TelephoneUtil {
                         if (port != null && !port.equals("")) {
                             if (isIpAddress(proxy)) {
                                 return new Proxy(Proxy.Type.HTTP, InetSocketAddress.createUnresolved(proxy, Integer.valueOf(port)));
-                            }
-                            else {
+                            } else {
                                 return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxy, Integer.valueOf(port)));
                             }
                         } else {
                             return null;
                         }
                     }
-                }
-                else {
+                } else {
                     if (c != null) {
                         c.close();
                     }
                 }
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -388,6 +375,7 @@ public class TelephoneUtil {
 
     /**
      * 得到手机上面当前默认使用的接入点
+     *
      * @param context
      * @return
      */
@@ -415,7 +403,7 @@ public class TelephoneUtil {
 
     /**
      * 获取当前网络类型
-     * 
+     *
      * @param context
      * @return
      */
@@ -432,7 +420,7 @@ public class TelephoneUtil {
 
     /**
      * 获取代理IP
-     * 
+     *
      * @param paramString
      * @param context
      * @return
@@ -465,7 +453,7 @@ public class TelephoneUtil {
 
     /**
      * 获取WIFI信息
-     * 
+     *
      * @param context
      * @return
      */
@@ -475,7 +463,7 @@ public class TelephoneUtil {
 
     /**
      * 是否为cmwap网络
-     * 
+     *
      * @param context
      * @return
      */
@@ -490,7 +478,7 @@ public class TelephoneUtil {
 
     /**
      * 是否为中国移动
-     * 
+     *
      * @param context
      * @return
      */
@@ -504,7 +492,7 @@ public class TelephoneUtil {
 
     /**
      * 是否为中国电信
-     * 
+     *
      * @param context
      * @return
      */
@@ -517,7 +505,7 @@ public class TelephoneUtil {
 
     /**
      * 是否为中国联通
-     * 
+     *
      * @param context
      * @return
      */
@@ -530,7 +518,7 @@ public class TelephoneUtil {
 
     /**
      * 当前网络类型（Is Mobile）
-     * 
+     *
      * @param context
      * @return
      */
@@ -546,7 +534,7 @@ public class TelephoneUtil {
 
     /**
      * Network Access point Uniwap
-     * 
+     *
      * @param context
      * @return
      */
@@ -561,7 +549,7 @@ public class TelephoneUtil {
 
     /**
      * 手机-短-震动
-     * 
+     *
      * @param context
      */
     public static void shotVibratePhone(Context context) {
@@ -571,7 +559,7 @@ public class TelephoneUtil {
 
     /**
      * 获取当前版本号，升级用
-     * 
+     *
      * @param context
      * @return
      */
@@ -607,7 +595,7 @@ public class TelephoneUtil {
 
     /**
      * SDCard是否可用
-     * 
+     *
      * @return
      */
     public static boolean existSDCard() {
@@ -618,22 +606,22 @@ public class TelephoneUtil {
     }
 
     /**
+     * 获取手机号
      *
      * @param context
      * @return
      */
-    public static String getPhoneNumber(Context context){
+    public static String getPhoneNumber(Context context) {
         TelephonyManager mTelephonyMgr;
         mTelephonyMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return mTelephonyMgr.getLine1Number();
     }
 
-
-
-
-    /**获取手机唯一识别码
-     * UUID+设备号序列号 唯一识别码（不可变）**/
-    public static String getPhoneUUID(Context context){
+    /**
+     * 获取手机唯一识别码
+     * UUID+设备号序列号 唯一识别码（不可变）
+     **/
+    public static String getPhoneUUID(Context context) {
 
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -643,9 +631,9 @@ public class TelephoneUtil {
 
         tmSerial = "" + tm.getSimSerialNumber();
 
-        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(),android.provider.Settings.Secure.ANDROID_ID);
+        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
 
         String uniqueId = deviceUuid.toString();
 

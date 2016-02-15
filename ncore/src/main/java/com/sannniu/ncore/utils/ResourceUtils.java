@@ -39,7 +39,6 @@ public class ResourceUtils {
             return null;
         }
     }
-
     /**
      * get content from a raw resource. This can only be used with resources whose value is the name of an asset files
      * -- that is, it can be used to open drawable, sound, and raw resources; it will fail on string and color

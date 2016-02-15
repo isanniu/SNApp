@@ -113,7 +113,6 @@ public class NetWorkUtil {
     /**
      * @param context
      * @return
-     * @author 白猫
      * <p/>
      * 获取当前的网络状态 -1：没有网络 1：WIFI网络2：wap 网络3：net网络
      */

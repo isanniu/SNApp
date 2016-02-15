@@ -1,88 +1,160 @@
 package com.sannniu.ncore.utils;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.os.Handler;
+import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sannniu.ncore.app.BaseApplication;
 
 /**
  * Created by niuzhikui on 2015/3/17.
  */
 public class ToastFactory {
-    private static Context context = null;
-    private static Toast toast = null;
-
-    private static Toast getToast(Context context, String text,int duration) {
-        if (ToastFactory.context == context) {
-            // toast.cancel();
-            toast.setText(text);
-            toast.setDuration(duration);
-
-        } else {
-
-            ToastFactory.context = context;
-            toast = Toast.makeText(context, text, duration);
+    private static Toast mToast;
+    private static Handler mHandler = new Handler();
+    private static Runnable r = new Runnable() {
+        public void run() {
+            mToast.cancel();
         }
-        return toast;
-    }
-    public static void show(Context context, String str) {
-        // Toast toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
-        Toast toast=ToastFactory.getToast(context, str,Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+    };
+
+    /**
+     * 弹出较长时间提示信息
+     *
+     * @param context 上下文对象
+     * @param msg     要显示的信息
+     */
+    public static void showLong(Context context, String msg) {
+        buildToast(context, msg, Toast.LENGTH_LONG).show();
     }
 
-    public static void cancelToast() {
-        if (toast != null) {
-            toast.cancel();
+    /**
+     * 弹出较长时间提示信息
+     *
+     * @param msg 要显示的信息
+     */
+    public static void showLong(String msg) {
+        buildToast(BaseApplication.getInstance(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 弹出较短时间提示信息
+     *
+     * @param context 上下文对象
+     * @param msg     要显示的信息
+     */
+    public static void showShort(Context context, String msg) {
+        buildToast(context, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 弹出较短时间提示信息
+     *
+     * @param msg 要显示的信息
+     */
+    public static void showShort(String msg) {
+        buildToast(BaseApplication.getInstance(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 构造Toast
+     *
+     * @param context 上下文
+     * @return
+     */
+    private static Toast buildToast(Context context, String msg, int duration) {
+        return buildToast(context, msg, duration, "#000000", 16);
+    }
+
+
+    /**
+     * 构造Toast
+     *
+     * @param context  上下文
+     * @param msg      消息
+     * @param duration 显示时间
+     * @param bgColor  背景颜色
+     * @return
+     */
+    public static Toast buildToast(Context context, String msg, int duration, String bgColor) {
+        return buildToast(context, msg, duration, bgColor, 16);
+    }
+
+
+    /**
+     * 构造Toast
+     *
+     * @param context  上下文
+     * @param msg      消息
+     * @param duration 显示时间
+     * @param bgColor  背景颜色
+     * @param textSp   文字大小
+     * @return
+     */
+    public static Toast buildToast(Context context, String msg, int duration, String bgColor, int textSp) {
+        return buildToast(context, msg, duration, bgColor, textSp, 10);
+    }
+
+    /**
+     * 构造Toast
+     *
+     * @param context      上下文
+     * @param msg          消息
+     * @param duration     显示时间
+     * @param bgColor      背景颜色
+     * @param textSp       文字大小
+     * @param cornerRadius 四边圆角弧度
+     * @return
+     */
+    public static Toast buildToast(Context context, String msg, int duration, String bgColor, int textSp, int cornerRadius) {
+        mHandler.removeCallbacks(r);
+
+        if (null == mToast) {
+            //构建Toast
+            mToast = Toast.makeText(context, null, duration);
+            mToast.setGravity(Gravity.CENTER, 0, 0);
+            //取消toast
+            mHandler.postDelayed(r, duration);
         }
-    }
-    public static void show(Context context, int resId) {
-        Toast toast=ToastFactory.getToast(context, context.getResources().getText(resId).toString(),Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
 
-    public static void show(Context context, int resId, int duration) {
-        Toast toast=ToastFactory.getToast(context, context.getResources().getText(resId).toString(),duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
+        //设置Toast文字
+        TextView tv = new TextView(context);
+        int dpPadding = DensityUtils.dp2px(context, 10);
+        tv.setPadding(dpPadding, dpPadding, dpPadding, dpPadding);
+        tv.setGravity(Gravity.CENTER);
+        tv.setText(msg);
+        tv.setTextColor(Color.WHITE);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSp);
 
-    public static void show(Context context, CharSequence text) {
-        Toast toast=ToastFactory.getToast(context,text.toString(),Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
+        //Toast文字TextView容器
+        LinearLayout mLayout = new LinearLayout(context);
+        GradientDrawable shape = new GradientDrawable();
+        shape.setColor(Color.parseColor(bgColor));
+        shape.setCornerRadius(cornerRadius);
+        shape.setStroke(1, Color.parseColor(bgColor));
+        shape.setAlpha(180);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mLayout.setBackground(shape);
+        }
+        mLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        //设置layout_gravity
+        params.gravity = Gravity.CENTER;
+        mLayout.setLayoutParams(params);
+        //设置gravity
+        mLayout.setGravity(Gravity.CENTER);
+        mLayout.addView(tv);
 
-    public static void show(Context context, CharSequence text, int duration) {
-        Toast toast=ToastFactory.getToast(context,text.toString(),duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-    }
+        //将自定义View覆盖Toast的View
+        mToast.setView(mLayout);
 
-    public static void show(Context context, int resId, Object... args) {
-        Toast toast=ToastFactory.getToast(context, String.format(context.getResources().getString(resId), args),Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
-    }
-
-    public static void show(Context context, String format, Object... args) {
-        Toast toast=ToastFactory.getToast(context, String.format(format, args),Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
-    }
-
-    public static void show(Context context, int resId, int duration, Object... args) {
-        Toast toast=ToastFactory.getToast(context, String.format(context.getResources().getString(resId), args),duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
-    }
-    public static void show(Context context, String format, int duration, Object... args) {
-        Toast toast=ToastFactory.getToast(context, String.format(format, args),duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        return mToast;
     }
 }

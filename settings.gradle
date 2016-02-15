@@ -1,1 +1,1 @@
-include ':app', ':ncore',':autolayout'
+include ':app', ':ncore', ':autolayout', ':nview'
